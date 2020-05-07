@@ -118,7 +118,7 @@ class GameBoard:
     @classmethod
     def turn_check(cls):
         """Checks whose turns it is now,
-        changes is if necessary
+        changes it if necessary
         """
         if cls.turn == "X":
             cls.turn = "O"
