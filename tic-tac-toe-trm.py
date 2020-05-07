@@ -5,6 +5,8 @@ class GameBoard:
     """
     x_won = 0
     o_won = 0
+    turn = "X"
+    move_counter = 0
 
     def __init__(self):
         self.board = {7: " ", 8: " ", 9: " ",
@@ -113,60 +115,62 @@ class GameBoard:
         else:
             return False
 
-
-def play_again():
-    """Asks if the players want to play once more.
-    """
-    while True:
-        a = input("Play again? Y/N: ")
-        if a == "Y" or a == "y":
-            return True
-        elif a == "N" or a == "n":
-            return False
+    @classmethod
+    def turn_check(cls):
+        """Checks whose turns it is now,
+        changes it if necessary
+        """
+        if cls.turn == "X":
+            cls.turn = "O"
         else:
-            print("Invalid input. Try again.")
+            cls.turn = "X"
 
+    def play(self):
+        """Plays the game
+        """
+        for i in range(10):
+            if self.move_counter >= 5 and self.check_winner():
+                break
+            self.make_a_move(self.turn)
+            self.move_counter += 1
+            if self.move_counter == 9:
+                print("Game over.")
+                print("It's a tie!")
+                break
+            self.turn_check()
 
-def game():
-    """Launches the game.
-    """
-    game_board = GameBoard()
-    move_counter = 0
-    turn = "X"
+    @staticmethod
+    def play_again():
+        """Asks if the players want to play once more.
+        """
+        while True:
+            a = input("Play again? Y/N: ")
+            if a == "Y" or a == "y":
+                return True
+            elif a == "N" or a == "n":
+                return False
+            else:
+                print("Invalid input. Try again.")
 
-    for i in range(10):
-        if move_counter >= 5 and game_board.check_winner():
-            break
-        game_board.make_a_move(turn)
-        move_counter += 1
-        if move_counter == 9:
-            print("Game over.")
-            print("It's a tie!")
-            break
-        if turn == "X":
-            turn = "O"
-        else:
-            turn = "X"
-    return
-
-
-def introduction():
-    print("Welcome to \"Tic-Tac-Toe\"!\n"
-          "Player enters the number of the cell on the board.\n"
-          "The cells are numbered as the NUM-keyboard:")
-    print("7" + "|" + "8" + "|" + "9")
-    print("-+-+-")
-    print("4" + "|" + "5" + "|" + "6")
-    print("-+-+-")
-    print("1" + "|" + "2" + "|" + "3")
-    print("Have fun!\n")
+    @staticmethod
+    def introduction():
+        print("Welcome to \"Tic-Tac-Toe\"!\n"
+              "Player enters the number of the cell on the board.\n"
+              "The cells are numbered as the NUM-keyboard:")
+        print("7" + "|" + "8" + "|" + "9")
+        print("-+-+-")
+        print("4" + "|" + "5" + "|" + "6")
+        print("-+-+-")
+        print("1" + "|" + "2" + "|" + "3")
+        print("Have fun!\n")
 
 
 if __name__ == "__main__":
-    introduction()
+    GameBoard.introduction()
     while True:
-        game()
-        if not play_again():
+        game = GameBoard()
+        game.play()
+        if not game.play_again():
             break
     print("Thanks for playing!")
     GameBoard.print_win_counter()
